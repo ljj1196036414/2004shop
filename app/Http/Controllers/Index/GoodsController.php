@@ -14,10 +14,9 @@ use App\model\index\OrderModel;
 use Illuminate\Support\Str;
 use App\model\index\OrderGoodsModel;
 use App\model\index\FavGoodsModel;
+use App\model\index\PersonalModel;
 class GoodsController extends Controller
 {
-
-
     //首页
     public function index(){
         return view('index/goods/index');
@@ -251,5 +250,33 @@ class GoodsController extends Controller
             $many +=$v["shop_price"]*$v['is_real'];
         }
         echo $many;
+    }
+    public function personal(){
+        return view('index/goods/personal');
+    }
+    public function personalindex(){
+        $user=session('user');
+//        dd($user);
+        if(empty($user)){
+            $data=[
+                'erron'=>4001,
+                'msg'=>'请先登录'
+            ];
+            echo json_encode($data);die;
+        }
+       $data=[
+           'signin'=>10,
+           'ptime'=>time(),
+           'uid'=>$user['uid']
+       ];
+        $personal=PersonalModel::insert($data);
+        dd($personal);
+        if($personal){
+            $per=[
+                'erron'=>0,
+                'msg'=>'您已签到'
+            ];
+            echo json_encode($per);die;
+        }
     }
 }

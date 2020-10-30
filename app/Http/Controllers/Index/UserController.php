@@ -96,6 +96,9 @@ class UserController extends Controller
         }
     }
     public function login(){
+        if(!empty(session('user'))){
+            return redirect('goods/personal');
+        }
         return view('index/login');
     }
     public function loginInfo(Request $request){

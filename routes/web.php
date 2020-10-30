@@ -14,7 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/','Index\GoodsController@index');
 //登录
+;
 Route::get('user/login','Index\UserController@login');
 Route::post('user/loginInfo','Index\UserController@loginInfo');
 Route::get('user/sign','Index\UserController@sign');
@@ -48,6 +50,9 @@ Route::get('/goods/fav','Index\GoodsController@fav');
 Route::get('/goods/comment','Index\GoodsController@comment');
 Route::post('/goods/commentinsert','Index\GoodsController@commentinsert');
 Route::get('/goods/commentindex','Index\GoodsController@commentindex');
+//个人中心
+Route::get('goods/personal','Index\GoodsController@personal');
+Route::get('goods/personalindex','Index\GoodsController@personalindex');
 //支付
 Route::get('pay/ali','Index\PayController@aliPay');
 //电影院
