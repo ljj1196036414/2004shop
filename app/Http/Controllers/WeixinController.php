@@ -11,12 +11,9 @@ use GuzzleHttp\Client;
 class WeixinController extends Controller
 {
 
-//    public function indexs(){
-//        $cc = $this->check();
-//        if($cc){
-//          echo  $_GET["echostr"];
-//        }
-//    }
+    public function indexs(){
+        $this->wxEvent();
+    }
     protected $xml_obj;
     private function check(){
         $signature = $_GET["signature"];
