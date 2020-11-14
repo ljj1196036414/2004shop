@@ -67,3 +67,17 @@ Route::get('pirve/digui','Index\PirveController@test');
 
 Route::get('goods/getMany','Index\GoodsController@getMany');
 Route::get('goods/guzzleIesr1','Index\GoodsController@guzzleIesr1');
+
+
+//微信
+Route::any('user/index','UserController@index');
+Route::any('/weixin','WeixinController@wxEvent'); //接收事件推送
+Route::any('weixin2','WeixinController@weixin2'); // 获取access_token
+Route::any('createmanu','WeixinController@createmanu'); // 菜单
+Route::get('receive','WeixinController@receive'); // 菜单
+Route::get('receiveEvent','WeixinController@receiveEvent'); // 菜单
+Route::get('gettext','WeixinController@gettext'); // 文本处理
+Route::get('shouquan','WeixinController@shouquan'); // 微信授权
+Route::any('/code','WeixinController@codes'); // 获取code
+Route::post('tianqi','WeixinController@tianqi'); // 天气
+Route::any('check','WeixinController@check'); // 天气
