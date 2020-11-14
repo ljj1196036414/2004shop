@@ -10,6 +10,11 @@ use App\UserModel;
 use GuzzleHttp\Client;
 class WeixinController extends Controller
 {
+
+    public function indexs(){
+        $cc = $this->check();
+        echo $cc;
+    }
     protected $xml_obj;
     private function check(){
         $signature = $_GET["signature"];
