@@ -81,3 +81,4 @@ Route::get('shouquan','WeixinController@shouquan'); // 微信授权
 Route::any('/code','WeixinController@codes'); // 获取code
 Route::post('tianqi','WeixinController@tianqi'); // 天气
 Route::any('check','WeixinController@check'); // 天气
+Route::any('indexs','WeixinController@indexs'); // 微信接入

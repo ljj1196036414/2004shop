@@ -13,7 +13,9 @@ class WeixinController extends Controller
 
     public function indexs(){
         $cc = $this->check();
-        echo $cc;
+        if($cc){
+          echo  $_GET["echostr"];
+        }
     }
     protected $xml_obj;
     private function check(){
