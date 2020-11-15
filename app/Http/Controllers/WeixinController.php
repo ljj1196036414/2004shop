@@ -34,6 +34,7 @@ class WeixinController extends Controller
     public function wxEvent()
     {
 //        $this->check();
+       // echo "123456";die;
         $xml_str = file_get_contents("php://input");//接收数据 获取最新的数据
        // dd($xml_str);
         file_put_contents('logs.log', $xml_str."\n\n",FILE_APPEND);//记录日志
@@ -58,6 +59,7 @@ class WeixinController extends Controller
                     $object=$this->xml_obj;
                     $aa=$this->transmitText($object,$Content);
                     //$bb=json_decode($aa);
+                    //dd($aa);
                     return $aa;die;
                 }//天气
                 if($EventKey=='V1002_TODAY_MUSIC'){    //签到
@@ -181,6 +183,7 @@ class WeixinController extends Controller
         $xml_str = file_get_contents("php://input");//接收数据 获取最新的数据
         $data = simplexml_load_string($xml_str, 'SimpleXMLElement', LIBXML_NOCDATA);//把xml文本转换成对象
         if($this->xml_obj->Content=='天气'){
+            //echo "1234";die;
             $Content=$this->tianqi();
             //var_dump($Content);die;
             $object=$this->xml_obj;
@@ -370,7 +373,7 @@ class WeixinController extends Controller
                     </xml>";
 
         $result = sprintf($textTpl,$object->FromUserName,$object->ToUserName,time(),'text',$content);
-       // var_dump($result);die;
+       //var_dump($result);die;
         //file_put_contents('logs.log',$result);
         return  $result;
     }
