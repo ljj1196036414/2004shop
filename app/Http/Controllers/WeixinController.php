@@ -56,7 +56,9 @@ class WeixinController extends Controller
                     //echo '11';die;
                     $Content=$this->tianqi();
                     //var_dump($Content);die;
+                    //echo __LINE__;die;
                     $object=$this->xml_obj;
+                    //var_dump( $object);die;
                     $aa=$this->transmitText($object,$Content);
                     //$bb=json_decode($aa);
                     echo $aa;die;
@@ -366,6 +368,7 @@ class WeixinController extends Controller
 
     //xml
     private function transmitText($object, $content){
+        //echo '12345';die;
         $textTpl = "<xml>
                     <ToUserName><![CDATA[%s]]></ToUserName>
                     <FromUserName><![CDATA[%s]]></FromUserName>
@@ -375,9 +378,10 @@ class WeixinController extends Controller
                     </xml>";
 
         $result = sprintf($textTpl,$object->FromUserName,$object->ToUserName,time(),'text',$content);
+        //dd($result);
        //var_dump($result);die;
         //file_put_contents('logs.log',$result);
-        echo $result;die;
+        echo $result;
     }
     public  function weixin(){
         // $token=request()->get('echostr','');
@@ -411,7 +415,7 @@ class WeixinController extends Controller
                 $content .= "\n"."地区:" . $v['citynm'] .","."日期:" . $v['days'] . $v['week'] .","."温度:" . $v['temperature'] .","."风速:" . $v['winp'] .","."天气:" . $v['weather'];
             }
         }
-        echo $content;die;
+        return $content;
     }
     public function aaa(){
         Redis::get();
