@@ -59,8 +59,8 @@ class WeixinController extends Controller
                     $object=$this->xml_obj;
                     $aa=$this->transmitText($object,$Content);
                     //$bb=json_decode($aa);
-                    //dd($aa);
-                    return $aa;die;
+                    echo $aa;die;
+                    // return $aa;die;
                 }//天气
                 if($EventKey=='V1002_TODAY_MUSIC'){    //签到
                     $FromUserName=$this->xml_obj->FromUserName;
@@ -71,14 +71,15 @@ class WeixinController extends Controller
 //                    dd($time);
                     if(in_array($time,$user_time)){
                         $Content='今天已签到';
-                        echo($Content);
+                        //echo($Content);
                     }else {
                         Redis::zAdd($key,$FromUserName,strtotime(date("Y-m-d")));
                         $Content = '签到成功';
-                        echo($Content);
+                        //echo($Content);
                     }
                     $object=$this->xml_obj;
-                   return $result=$this->transmitText($object,$Content);
+                   $tianqi=$result=$this->transmitText($object,$Content);
+                   echo $tianqi;die;
                 }//签到
                 if($EventKey=='V1003_TODAY_MUSIC'){   //微信授权
                     $code=$this->shouquan();
@@ -88,7 +89,8 @@ class WeixinController extends Controller
                         $content= "授权失败";
                     }
                     $object=$this->xml_obj;
-                    $this->transmitText($object, $content);
+                    $shouquan=$this->transmitText($object, $content);
+                    echo $shouquan;die;
                 }
                 $openid=$this->xml_obj->FromUserName;
                 $where=[
@@ -173,8 +175,8 @@ class WeixinController extends Controller
             file_put_contents('logs.log', $userss."\n\n",FILE_APPEND);//记录日志
 
             $users = json_decode($userss,true);
-            dd($users);
-            return $users;
+            //dd($users);
+            echo $users;die;
         }
     }
     //处理文本
@@ -189,7 +191,7 @@ class WeixinController extends Controller
             $object=$this->xml_obj;
             $aa=$this->transmitText($object,$Content);
             //$bb=json_decode($aa);
-            return $aa;
+            echo $aa;die;
         }
         $datas[]=[
             "FromUserName"=>$this->xml_obj->FromUserName,
@@ -354,7 +356,7 @@ class WeixinController extends Controller
         ]);
 
         $data= $resoonse->getBody();
-        return $data;
+        echo $data;die;
     }
     //签到
     public  function qiandao(){
@@ -375,7 +377,7 @@ class WeixinController extends Controller
         $result = sprintf($textTpl,$object->FromUserName,$object->ToUserName,time(),'text',$content);
        //var_dump($result);die;
         //file_put_contents('logs.log',$result);
-        return  $result;
+        echo $result;die;
     }
     public  function weixin(){
         // $token=request()->get('echostr','');
@@ -409,7 +411,7 @@ class WeixinController extends Controller
                 $content .= "\n"."地区:" . $v['citynm'] .","."日期:" . $v['days'] . $v['week'] .","."温度:" . $v['temperature'] .","."风速:" . $v['winp'] .","."天气:" . $v['weather'];
             }
         }
-        return $content;
+        echo $content;die;
     }
     public function aaa(){
         Redis::get();
