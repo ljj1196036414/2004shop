@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserModel extends Model
 {
-    protected $table='p_user';
-    protected $primaryKey='pid';
+    protected $table='user';
+    protected $primaryKey='id';
     public $timestamps=false;
 }
 

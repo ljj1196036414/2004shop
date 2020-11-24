@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "barryvdh/laravel-debugbar": "^3.5",
         "encore/laravel-admin": "^1.8",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "~6.0",

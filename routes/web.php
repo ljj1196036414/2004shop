@@ -82,3 +82,13 @@ Route::any('/code','WeixinController@codes'); // 获取code
 Route::post('tianqi','WeixinController@tianqi'); // 天气
 Route::any('check','WeixinController@check'); // 天气
 Route::any('indexs','WeixinController@indexs'); // 微信接入
+
+
+Route::prefix('/api')->group(function(){
+   Route::any('/userinfo','Werixin\ApiController@userInfo');
+   Route::any('/test','Werixin\ApiController@test');
+   Route::any('/wxlogin','Werixin\ApiController@wxlogin');
+   Route::get('/leibiao','Werixin\ApiController@leibiao');//列表详情
+   Route::any('/lest','Werixin\ApiController@lest');//商品详情
+   Route::any('/goodslest','Werixin\ApiController@goodslest');//列表详情
+});
