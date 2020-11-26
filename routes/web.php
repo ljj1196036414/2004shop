@@ -91,4 +91,7 @@ Route::prefix('/api')->group(function(){
    Route::get('/leibiao','Werixin\ApiController@leibiao');//列表详情
    Route::any('/lest','Werixin\ApiController@lest');//商品详情
    Route::any('/goodslest','Werixin\ApiController@goodslest');//列表详情
+   Route::any('/cart','Werixin\ApiController@cart')->middleware('check.token');//加入购物车
+   Route::any('/cartlist','Werixin\ApiController@cartlist')->middleware('check.token');//购物车列表
+   Route::any('/collection','Werixin\ApiController@collection')->middleware('check.token');//收藏
 });

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redis;
 use App\model\GoodsModel;
 //use App\model\UsersModel;
 use App\UserModel;
+use App\model\CartModel;
 class ApiController extends Controller
 {
     public function __construct(){
@@ -30,7 +31,7 @@ class ApiController extends Controller
         //接收用户信息
         $userinfo=json_decode(file_get_contents("php://input"),true);
         $url='https://api.weixin.qq.com/sns/jscode2session?appid='.env('WX_XCX_APPID').'&secret='.env('WX_XCX_APPSECRET').'&js_code='.$code.'&grant_type=authorization_code';
-       // dd($url);
+       //dd($url);
         $data=json_decode(file_get_contents($url),true);
         //dd($data);
         if(isset($data['errcode'])){//失败
@@ -45,6 +46,7 @@ class ApiController extends Controller
             //dd($u);
             if($u){
                 //TODO 老用户
+                $uid = $u->id;
             }else{
                 $u_info=[
                     'openid'      =>$openid,
@@ -64,26 +66,28 @@ class ApiController extends Controller
 
              $token = sha1($data['openid'] . $data['session_key'].mt_rand(0,999999));
             //保存token
-//            $redis_login_hash = 'h:xcx:login:'.$token;
-//
-//            $login_info = [
-//                'uid'           => 1234,
-//                'user_name'     => "张三",
-//                'login_time'    => date('Y-m-d H:i:s'),
-//                'login_ip'      => $request->getClientIp(),
-//                'token'         => $token
-//            ];
-//
-//            //保存登录信息
-//            Redis::hMset($redis_login_hash,$login_info);
-//            // 设置过期时间
-//            Redis::expire($redis_login_hash,7200);
+            $redis_login_hash = 'h:xcx:login:'.$token;
+
+           $login_info = [
+                'uid' => $uid,
+                'user_name' => "",
+                'login_time' => date('Y-m-d H:i:s'),
+                'login_ip' => $request->getClientIp(),
+                'token' => $token,
+                'openid'    => $openid
+            ];
+
+            //保存登录信息
+            Redis::hMset($redis_login_hash, $login_info);
+            // 设置过期时间
+            Redis::expire($redis_login_hash, 7200);
 
             $response = [
                 'errno' => 0,
                 'msg'   => 'ok',
                 'data'  => [
-                    'token' => $token
+                    'token' => $token,
+                   'openid'=>$data['openid']
                 ]
             ];
         }
@@ -135,15 +139,77 @@ class ApiController extends Controller
     }
     //加入购物车
     public function cart(Request $request){
-        $goods_id=$request->get('goods_id');
+        $data = $request->all();
+        //dd($goods_id);
+        $uid = $_SERVER['uid'];
+
         $where=[
-            'goods_id'=>$goods_id
+            'goods_id'=>$data['goods_id']
         ];
-        $res=GoodsModel::where($where)->get();
+        $price = GoodsModel::find($data['goods_id'])->shop_price;
+        //var_dump($goods);die;
+        $login_info = [
+                'goods_id'       => $data['goods_id'],
+                'goods_num'=>1,
+                'uid'     =>$uid,
+                'add_time'    => date('Y-m-d H:i:s'),
+                'shop_price'=>$price
+
+            ];
+        //dd($login_info);
+        $res=CartModel::insert($login_info);
         if($res){
             //TODO 添加成功
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok',
+            ];
+
         }else{
             //TODO  添加失败
+            $response = [
+                'errno' => 500000000,
+                'msg'   => '失败',
+            ];
         }
+        return $response;
+    }
+    //购物车列表
+    public function cartlist(Request $request){
+       $uid=$_SERVER['uid'];
+
+       $goods=CartModel::leftjoin('p_goods','p_goods.goods_id','=','p_cart.goods_id')->where('p_cart.uid',$uid)->get()->toArray();
+       //dd($goods);
+
+        if(!empty($goods)){
+            //TODO 成功
+            $cart_return=[
+                'errno'=>0,
+                'msg'=>'ok',
+                'data'=>$goods
+            ];
+        }else{
+            //TODO 失败
+            $cart_return=[
+                'errno'=>5000000,
+                'msg'=>'失败',
+            ];
+        }
+        return $cart_return;
+    }
+    //收藏
+    public function collection(Request $request){
+        $goods_id=$request->all(['goods_id']);
+       // dd($goods);
+       $uid= $_SERVER['uid'];
+       //用户收藏的商品有序集合  ss有序集合的意思
+       $redis_key='ss:goods:fav:'.$uid;
+        //将商品id加入有序集合，并给排序值
+       Redis::Zadd($redis_key,time(),$goods_id);
+       $response=[
+           'errno'=>0,
+           'msg'=>'ok'
+       ];
+       return $response;
     }
 }
