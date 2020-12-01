@@ -84,7 +84,7 @@ class WeixinController extends Controller
                    echo $tianqi;die;
                 }//签到
                 if($EventKey=='V1003_TODAY_MUSIC'){   //微信授权
-                    $code=$this->shouquan();
+                    $code=$this->codes();
                     if(!empty($code)){
                         $content= "授权成功";
                     }else{
@@ -334,9 +334,9 @@ class WeixinController extends Controller
                                 "key"=>"V1002_TODAY_MUSIC"
                             ],
                             [
-                                "type"=>"click",
+                                "type"=>"view",
                                 "name"=>"商城",
-                                "key"=>"V1003_TODAY_MUSIC"
+                                "key"=>"http://www.414shop.top/"
                             ]
                         ]
                     ],
