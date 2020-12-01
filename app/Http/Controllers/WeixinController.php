@@ -336,7 +336,7 @@ class WeixinController extends Controller
                             ],
                             [
                                 "type"=>"view",
-                                "name"=>"aaaa",
+                                "name"=>"aa",
                                 "key"=>"http://www.414shop.top/"
                             ]
                         ]
