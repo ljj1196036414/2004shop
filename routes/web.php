@@ -94,4 +94,6 @@ Route::prefix('/api')->group(function(){
    Route::any('/cart','Werixin\ApiController@cart')->middleware('check.token');//加入购物车
    Route::any('/cartlist','Werixin\ApiController@cartlist')->middleware('check.token');//购物车列表
    Route::any('/collection','Werixin\ApiController@collection')->middleware('check.token');//收藏
+   Route::post('/decrnum','Werixin\ApiController@decrnum')->middleware('check.token');//购物车自减
+   Route::post('/delgoods','Werixin\ApiController@delgoods')->middleware('check.token');//购物车自减
 });

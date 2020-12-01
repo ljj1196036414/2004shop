@@ -16,6 +16,7 @@ class CheckToken
     public function handle($request, Closure $next)
     {
         //验证token
+        //dd($request->all());
         $token = $request->get('token');
         //dd($token);
         $redis_login_hash = 'h:xcx:login:' . $token;

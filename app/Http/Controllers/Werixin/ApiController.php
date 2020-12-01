@@ -140,15 +140,17 @@ class ApiController extends Controller
     //加入购物车
     public function cart(Request $request){
         $data = $request->all();
-        //dd($goods_id);
         $uid = $_SERVER['uid'];
-
-        $where=[
-            'goods_id'=>$data['goods_id']
-        ];
-        $price = GoodsModel::find($data['goods_id'])->shop_price;
-        //var_dump($goods);die;
-        $login_info = [
+        $cart_info=CartModel::where(['goods_id'=>$data['goods_id']])->get()->toArray();//查询数据是否存在
+        //var_dump($cart_info);die;
+        if(!empty($cart_info)){
+            $where=[
+                'goods_id'=>$data['goods_id']
+            ];
+            $res=CartModel::where($where)->increment('goods_num',1); //goods_num自增1
+        }else{
+            $price = GoodsModel::find($data['goods_id'])->shop_price;
+            $login_info = [
                 'goods_id'       => $data['goods_id'],
                 'goods_num'=>1,
                 'uid'     =>$uid,
@@ -156,8 +158,9 @@ class ApiController extends Controller
                 'shop_price'=>$price
 
             ];
-        //dd($login_info);
-        $res=CartModel::insert($login_info);
+            //dd($login_info);
+            $res=CartModel::insert($login_info);
+        }
         if($res){
             //TODO 添加成功
             $response = [
@@ -167,6 +170,26 @@ class ApiController extends Controller
 
         }else{
             //TODO  添加失败
+            $response = [
+                'errno' => 500000000,
+                'msg'   => '失败',
+            ];
+        }
+        return $response;
+    }
+    //购物车自减
+    public function decrnum(Request $request){
+        $data = $request->all();
+        $res=CartModel::where(['goods_id'=>$data['goods_id']])->decrement('goods_num',1);//goods_num自减1
+        if($res){
+            //TODO 删除成功
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok',
+            ];
+
+        }else{
+            //TODO  删除失败
             $response = [
                 'errno' => 500000000,
                 'msg'   => '失败',
@@ -211,5 +234,24 @@ class ApiController extends Controller
            'msg'=>'ok'
        ];
        return $response;
+    }
+    //购物车删除
+    public function delgoods(Request $request){
+        $goods_id=$request->post('goods');
+        $goods_arr=explode(',',$goods_id);//explode 字符串转换数组  ，分割
+        $uid=$_SERVER['uid'];
+        $res=CartModel::where(['uid'=>$uid])->whereIn('goods_id',$goods_arr)->delete();
+        if($res){
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok'
+            ];
+        }else{
+            $response = [
+                'errno' => 500002,
+                'msg'   => '内部错误'
+            ];
+        }
+        return $response;
     }
 }

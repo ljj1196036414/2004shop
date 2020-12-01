@@ -307,7 +307,7 @@ class WeixinController extends Controller
             'city'=>$where['city'],
             'province'=>$where['province'],
             'country'=>$where['country'],
-            'subscribe_time'=>$where['subscribe_time']
+            'add_time'=>$where['subscribe_time']
         ];
         UserModel::insert($ress);
         $content = "欢迎关注";
