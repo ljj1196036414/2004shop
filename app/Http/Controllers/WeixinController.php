@@ -211,7 +211,7 @@ class WeixinController extends Controller
         $media_id=$this->xml_obj->MediaId;
         $url='https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
         $img = file_get_contents($url);
-        //var_dump($img);die;
+        var_dump($img);die;
         $images=uniqid();
         $media_path = 'img/'.$images.'.jpg';
         $res = file_put_contents($media_path,$img);
@@ -230,6 +230,7 @@ class WeixinController extends Controller
         ];
         $information_model=new InformationModel();
         $information_model->insert($datas);
+        //var_dump($arr);die;
     }
     //处理语音
     public function voice(){
@@ -393,6 +394,7 @@ class WeixinController extends Controller
     //access_token 存缓存
     public  function weixin2(){
         $tokens = Redis::get("token");
+        //dd($tokens);
         if(!$tokens){
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx6b03c964599b8ff1&secret=dd7d5fa1b03cfdbcb4948e4c08c5609c";
             $token = file_get_contents($url);
